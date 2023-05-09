@@ -11,7 +11,7 @@ def preprocessAdmissions():
     df = pd.read_csv('data/admissions.csv')
 
     # Choose 1000 random patients 
-    df = df.sample(n=1000, random_state=42)
+    df = df.sample(n=100000, random_state=42)
 
     # Create a new dataframe with only one column for subject_id
     master_df = df[['subject_id']]
@@ -53,6 +53,11 @@ def preprocessDiagnoses():
 
 
     print(master_df.head())
+
+    # Count and print number of patients with athlerosclerosis, hypertension, and hypercholesterolemia
+    print('Number of patients with atherosclerosis: {}'.format(master_df['Atherosclerosis'].sum()))
+    print('Number of patients with hypertension: {}'.format(master_df['Hypertension'].sum()))
+    print('Number of patients with hypercholesterolemia: {}'.format(master_df['Hypercholesterolemia'].sum()))
 
 # def preprocessLabEvents():
 #     # Get the master_df
