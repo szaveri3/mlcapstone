@@ -14,16 +14,16 @@ def preprocessAdmissions():
     df = df.sample(n=1000, random_state=42)
 
     # Create a new dataframe with only one column for subject_id
-    df_subject_id = df[['subject_id']]
-    df_subject_id = df_subject_id.drop_duplicates()
+    master_df = df[['subject_id']]
+    master_df = master_df.drop_duplicates()
 
     # Save the subject_id dataframe as a pickle file
-    with open('data/subject_id.pickle', 'wb') as f:
-        pickle.dump(df_subject_id, f)
+    with open('data/master_df.pickle', 'wb') as f:
+        pickle.dump(master_df, f)
 
 def preprocessDiagnoses():
-    # Get the subject_id dataframe
-    with open('data/subject_id.pickle', 'rb') as f:
+    # Get the master_df dataframe
+    with open('data/master_df.pickle', 'rb') as f:
         master_df = pickle.load(f)
 
     # Read in the csv file
@@ -47,11 +47,22 @@ def preprocessDiagnoses():
     # If the patient has a diagnosis of atherosclerosis with diagnosis code 41401, set the value to 1
     master_df.loc[master_df['subject_id'].isin(df[df['icd_code'].isin(['41401'])]['subject_id']), 'Atherosclerosis'] = 1
 
-    # print the first 5 rows of the master_df dataframe
+    # Dump the master_df as a pickle file
+    with open('data/master_df.pickle', 'wb') as f:
+        pickle.dump(master_df, f)
+
+
     print(master_df.head())
 
+# def preprocessLabEvents():
+#     # Get the master_df
+#     with open('data/master_df.pickle', 'rb') as f:
+#         master_df = pickle.load(f)
 
+#     # Read in the csv file
+#     df = pd.read_csv('data/labevents.csv')
 
+#     print(df.head())
 
 preprocessAdmissions()
 preprocessDiagnoses()
