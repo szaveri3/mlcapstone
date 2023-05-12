@@ -24,9 +24,9 @@ def load_df():
     return master_df
 
 # Functions for each model
-def logistic_regression(C, X_train, y_train, X_test, y_test):
+def logistic_regression(X_train, y_train, X_test, y_test):
     # Create a logistic regression model with parameters 
-    log_reg = LogisticRegression(C=C, random_state=42)
+    log_reg = LogisticRegression(C=0.01, random_state=42)
 
     # Train the model
     log_reg.fit(X_train, y_train)
@@ -37,9 +37,9 @@ def logistic_regression(C, X_train, y_train, X_test, y_test):
     # Return the predictions
     return y_pred
 
-def decision_tree(max_depth, X_train, y_train, X_test, y_test):
+def decision_tree(X_train, y_train, X_test, y_test):
     # Create a decision tree model with parameters
-    dt = DecisionTreeClassifier(max_depth=max_depth, min_samples_leaf=0.16, random_state=42)
+    dt = DecisionTreeClassifier(max_depth=5, min_samples_leaf=0.16, random_state=42)
 
     # Train the model
     dt.fit(X_train, y_train)
@@ -65,10 +65,10 @@ def neural_network(X_train, y_train, X_test, y_test):
 
 def majority_classifier(X_train, y_train, X_test, y_test):
     # Create a logistic regression model with parameters
-    log_reg = LogisticRegression(C=0.0001, random_state=42)
+    log_reg = LogisticRegression(C=0.01, random_state=42)
 
     # Create a decision tree model with parameters
-    dt = DecisionTreeClassifier(max_depth=10, min_samples_leaf=0.16, random_state=42)
+    dt = DecisionTreeClassifier(max_depth=5, min_samples_leaf=0.16, random_state=42)
 
     # Create a neural network model with parameters
     nn = MLPClassifier(hidden_layer_sizes=(100, 100), max_iter=400, random_state=42)

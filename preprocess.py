@@ -77,7 +77,8 @@ def preprocessPatients():
     master_df['Female'] = 0
 
     # If patient has gender 'F', set the value to 1
-    master_df.loc[master_df['subject_id'].isin(df[df['gender'].isin(['F'])]['subject_id']), 'Male'] = 1
+    master_df.loc[master_df['subject_id'].isin(df[df['gender'].isin(['F'])]['subject_id']), 'Female'] = 1
+    
 
     # Add columns called 'Age <40', 'Age 40-59', 'Age 60-79', and 'Age 80+' to master_df
     master_df['Age <40'] = 0
@@ -99,5 +100,18 @@ def preprocessPatients():
     with open('data/master_df.pickle', 'wb') as f:
         pickle.dump(master_df, f)
 
+    # Print size of dataframe
+    print('Size of dataframe: {}'.format(master_df.shape))
 
-    
+    # Print number of patients in each age group
+    print('Number of patients in age group <40: {}'.format(master_df['Age <40'].sum()))
+    print('Number of patients in age group 40-59: {}'.format(master_df['Age 40-59'].sum()))
+    print('Number of patients in age group 60-79: {}'.format(master_df['Age 60-79'].sum()))
+    print('Number of patients in age group 80+: {}'.format(master_df['Age 80+'].sum()))
+
+
+
+preprocessAdmissions()
+preprocessDiagnoses()
+preprocessPatients()
+

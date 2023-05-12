@@ -15,9 +15,6 @@ def main():
     # Load the dataframe
     master_df = load_df()
 
-    print('Master dataframe:')
-    print(master_df.head())
-
     # Create the features and labels, label is atherosclerosis
     X = master_df[['Hypertension', 'Hypercholesterolemia', 'Male', 'Female', 'Age <40', 'Age 40-59', 'Age 60-79', 'Age 80+']]
     y = master_df['Atherosclerosis']
@@ -25,52 +22,44 @@ def main():
     # Split the data into training and testing sets, 0.8 and 0.2
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-    # Run logistic regression with different values of C
-    C = [0.01, 0.1, 1, 10, 100]
-    log_accuracy = []
-    log_precision = []
-    log_recall = []
-    for c in C:
-        y_pred = logistic_regression(c, X_train, y_train, X_test, y_test)
+    # Create a list of models
+    models = [logistic_regression, decision_tree, neural_network, majority_classifier]
+
+    # Create a list of model names
+    model_names = ['Logistic Regression', 'Decision Tree', 'Neural Network', 'Majority Classifier']
+
+    # Create a list of model predictions
+    model_predictions = []
+
+    # Create a list of model accuracies
+    model_accuracies = []
+
+    # Create a list of model precisions
+    model_precisions = []
+
+    # Create a list of model recalls
+    model_recalls = []
+
+    # Run each model
+    for model in models:
+        # Make predictions
+        y_pred = model(X_train, y_train, X_test, y_test)
+
+        # Calculate metrics
         accuracy, precision, recall = calculate_metrics(y_test, y_pred)
-        log_accuracy.append(accuracy)
-        log_precision.append(precision)
-        log_recall.append(recall)
 
-        print('Logistic regression with C = {}:'.format(c))
-        print('Accuracy: {}'.format(accuracy))
+        # Append the predictions, accuracies, precisions, and recalls to their lists
+        model_predictions.append(y_pred)
+        model_accuracies.append(accuracy)
+        model_precisions.append(precision)
+        model_recalls.append(recall)
 
+    # Create a dataframe of the metrics
+    metrics_df = pd.DataFrame({'Model': model_names, 'Accuracy': model_accuracies, 'Precision': model_precisions, 'Recall': model_recalls})
 
-    # Run decision tree with different large values of max_depth incrementing by 5
-    max_depth = [5, 10, 15, 20, 25, 30, 35, 40]
-    dt_accuracy = []
-    dt_precision = []
-    dt_recall = []
-    for depth in max_depth:
-        y_pred = decision_tree(depth, X_train, y_train, X_test, y_test)
-        accuracy, precision, recall = calculate_metrics(y_test, y_pred)
-        dt_accuracy.append(accuracy)
-        dt_precision.append(precision)
-        dt_recall.append(recall)
+    # Print the dataframe
+    print(metrics_df)
 
-        print('Decision tree with max_depth = {}:'.format(depth))
-        print('Accuracy: {}'.format(accuracy))
-
-    # Plot the accuracy of decision tree with different values of max_depth, fix scale
-    plt.figure()
-    plt.plot(max_depth, dt_accuracy)
-    plt.xlabel('max_depth')
-    plt.ylabel('Accuracy')
-    plt.title('Decision Tree Accuracy vs max_depth')
-    plt.show()
-
-    # Plot the accuracy of logistic regression with different values of C, fix scale
-    plt.figure()
-    plt.plot(C, log_accuracy)
-    plt.xlabel('C')
-    plt.ylabel('Accuracy')
-    plt.title('Logistic Regression Accuracy vs C')
-    plt.show()
     
 
 
